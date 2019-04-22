@@ -3,7 +3,7 @@
 {% block body %}
     <ul>
         {% for book in books %}
-            <li><a href="{{ path('book_show', {'name': book}) }}">{{ book }}</a></li>
+            <li><a href="{{ path('book_show', {'id': book.id}) }}">{{ book.title }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

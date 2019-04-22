@@ -2,19 +2,47 @@
 
 namespace App\Controller;
 
+use App\Entity\Book;
+use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/")
+ */
 class BookController extends AbstractController
 {
     /**
-     * @Route("/book/{name}", name="book_show")
+     * @Route("/new", name="book_new", methods={"GET", "POST"})
      */
-    public function show(string $name)
+    public function new()
     {
-        $book = $name;
+
+    }
+
+    /**
+     * @Route("/{id}", name="book_show", methods={"GET"})
+     */
+    public function show(Book $book)
+    {
         return $this->render('book/show.html.twig', [
             'book' => $book
         ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="book_edit", methods={"GET", "POST"})
+     */
+    public function edit(Book $book)
+    {
+
+    }
+
+    /**
+     * @Route("/{id}", name="book_delete", methods={"DELETE"})
+     */
+    public function delete(Book $book)
+    {
+
     }
 }
