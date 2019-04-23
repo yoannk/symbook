@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des livres{% endblock %}
+
+{% block body %}
+    <h1>Liste des livres</h1>
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td><a href="{{ path('book_show', {'id': book.id}) }}">{{ book.title }}</a></td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('book_edit', {'id': book.id}) }}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-danger btn-sm"
+                       href="{{ path('book_delete', {'id': book.id, 'token': csrf_token('delete'~book.id)}) }}">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul>
+
+    </ul>
+{% endblock %}
