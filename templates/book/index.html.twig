@@ -7,24 +7,34 @@
     <table class="table table-sm">
         <thead>
         <tr>
+            <th>Image</th>
             <th>Id</th>
             <th>Titre</th>
-            <th>Actions</th>
+            <th>Description</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for book in books %}
             <tr>
+                <td>
+                    {% if book.image.name is defined %}
+                        <img width="50px" src="{{ asset('uploads/'~book.image.name) }}" alt="">
+                    {% endif %}
+                </td>
                 <td>{{ book.id }}</td>
                 <td><a href="{{ path('book_show', {'id': book.id}) }}">{{ book.title }}</a></td>
+                <td>{{ book.description }}</a></td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="{{ path('book_edit', {'id': book.id}) }}">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <a class="btn btn-danger btn-sm"
-                       href="{{ path('book_delete', {'id': book.id, 'token': csrf_token('delete'~book.id)}) }}">
-                        <i class="fas fa-times"></i>
-                    </a>
+                    <div class="d-inline-flex">
+                        <a class="btn btn-primary btn-sm" href="{{ path('book_edit', {'id': book.id}) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm"
+                           href="{{ path('book_delete', {'id': book.id, 'token': csrf_token('delete'~book.id)}) }}">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}

@@ -15,5 +15,6 @@ const $ = require('jquery');
 require('popper.js')
 require('bootstrap')
 require('holderjs')
+bsCustomFileInput = require('bs-custom-file-input')
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

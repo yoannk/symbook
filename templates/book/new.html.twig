@@ -10,3 +10,10 @@
     <button class="btn btn-primary" type="submit">Ajouter</button>
     {{ form_end(form) }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        bsCustomFileInput.init()
+    </script>
+{% endblock %}

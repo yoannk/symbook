@@ -34,6 +34,11 @@ class Book
      */
     private $description;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"}, fetch="EAGER")
+     */
+    private $image;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +64,18 @@ class Book
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -31,12 +32,29 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $book->getImage()->getFile();
+
+            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            try {
+                $file->move(
+                    $this->getParameter('uploads_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            $book->getImage()->setName($fileName);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
             $em->flush();
 
             $this->addFlash('success', 'Livre ajouté avec succès !');
-            $this->redirectToRoute('book_index');
+            return $this->redirectToRoute('book_index');
         }
 
         return $this->render('book/new.html.twig', [
@@ -67,7 +85,7 @@ class BookController extends AbstractController
      */
     public function delete(Book $book, Request $request)
     {
-        if ($this->isCsrfTokenValid('delete'.$book->getId(), $request->query->get('token'))) {
+        if ($this->isCsrfTokenValid('delete' . $book->getId(), $request->query->get('token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($book);
             $entityManager->flush();
