@@ -39,6 +39,11 @@ class Book
      */
     private $image;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Author", inversedBy="books", cascade={"persist"}, fetch="EAGER")
+     */
+    private $author;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -73,10 +78,20 @@ class Book
         return $this->image;
     }
 
-    public function setImage(?Image $image): self
+    public function setImage(Image $image): self
     {
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getAuthor(): ?Author
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(Author $author): void
+    {
+        $this->author = $author;
     }
 }

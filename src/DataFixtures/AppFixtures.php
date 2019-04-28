@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -11,50 +12,79 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AppFixtures extends Fixture
 {
-    const FIXTURES_IMAGES_PATH = __DIR__ . '/images';
-    const UPLOADS_DIR = __DIR__ . '/../../public/uploads';
+    const FIXTURES_IMAGES_PATH = __DIR__.'/images';
+    const UPLOADS_DIR = __DIR__.'/../../public/uploads';
+
+    private $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create('fr_FR');
+    }
 
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create('fr_FR');
+        $authors = $this->loadAuthors($manager, 10);
+        $books = $this->loadBooks($manager, $authors, 50);
 
-        $file = file_get_contents(__DIR__ . '/books.json');
-        $books = json_decode($file);
+        $manager->flush();
+    }
 
+    /**
+     * @return Book[]
+     */
+    private function loadBooks(ObjectManager $manager, $authors, $amount)
+    {
+        $books = [];
 
-
-        foreach ($books as $k => $book) {
-            if ($k == 100) {
-                break;
-            }
-            $newBook = new Book();
-            $newBook->setTitle($book->fields->titre);
-            $newBook->setDescription($faker->paragraph());
+        for ($i = 0; $i < $amount; ++$i) {
+            $book = new Book();
+            $book->setTitle(implode(' ', $this->faker->words(rand(3, 7))));
+            $book->setDescription($this->faker->paragraph());
 
             $imageId = rand(0, 99);
             // copy because the file will be moved
             copy(
-                self::FIXTURES_IMAGES_PATH . "/{$imageId}.jpg",
-                self::FIXTURES_IMAGES_PATH . "/{$imageId}-copy.jpg"
+                self::FIXTURES_IMAGES_PATH."/{$imageId}.jpg",
+                self::FIXTURES_IMAGES_PATH."/{$imageId}-copy.jpg"
             );
             $file = new UploadedFile(
-                self::FIXTURES_IMAGES_PATH . "/{$imageId}-copy.jpg",
-                $imageId . '.jpg',
+                self::FIXTURES_IMAGES_PATH."/{$imageId}-copy.jpg",
+                $imageId.'.jpg',
                 null,
                 null,
                 true // enable test mode
             );
-            $fileName = md5(uniqid()) . '.jpg';
+            $fileName = md5(uniqid()).'.jpg';
             $file->move(self::UPLOADS_DIR, $fileName);
 
             $image = new Image();
             $image->setName($fileName);
 
-            $newBook->setImage($image);
+            $book->setImage($image);
+            $book->setAuthor($this->faker->randomElement($authors));
 
-            $manager->persist($newBook);
+            $manager->persist($book);
+            $books[] = $book;
         }
 
-        $manager->flush();
+        return $books;
+    }
+
+    /**
+     * @return Author[]
+     */
+    private function loadAuthors(ObjectManager $manager, $amount)
+    {
+        $authors = [];
+
+        for ($i = 0; $i < $amount; ++$i) {
+            $author = new Author();
+            $author->setFirstname($this->faker->firstName);
+            $author->setLastname($this->faker->lastName);
+            $authors[] = $author;
+        }
+
+        return $authors;
     }
 }

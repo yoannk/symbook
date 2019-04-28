@@ -10,6 +10,7 @@
             <th>Image</th>
             <th>Id</th>
             <th>Titre</th>
+            <th>Auteur</th>
             <th>Description</th>
             <th></th>
         </tr>
@@ -24,6 +25,7 @@
                 </td>
                 <td>{{ book.id }}</td>
                 <td><a href="{{ path('book_show', {'id': book.id}) }}">{{ book.title }}</a></td>
+                <td>{{ book.author.fullname }}</a></td>
                 <td>{{ book.description }}</a></td>
                 <td>
                     <div class="d-inline-flex">

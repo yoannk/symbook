@@ -18,7 +18,7 @@ class BookController extends AbstractController
     public function index(BookRepository $bookRepository)
     {
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findBy([], ['id' => 'DESC'])
+            'books' => $bookRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
 
@@ -32,10 +32,9 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $file = $book->getImage()->getFile();
 
-            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             // Move the file to the directory where brochures are stored
             try {
@@ -54,11 +53,12 @@ class BookController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Livre ajouté avec succès !');
+
             return $this->redirectToRoute('book_index');
         }
 
         return $this->render('book/new.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -68,7 +68,7 @@ class BookController extends AbstractController
     public function show(Book $book)
     {
         return $this->render('book/show.html.twig', [
-            'book' => $book
+            'book' => $book,
         ]);
     }
 
@@ -77,7 +77,6 @@ class BookController extends AbstractController
      */
     public function edit(Book $book)
     {
-
     }
 
     /**
@@ -85,7 +84,7 @@ class BookController extends AbstractController
      */
     public function delete(Book $book, Request $request)
     {
-        if ($this->isCsrfTokenValid('delete' . $book->getId(), $request->query->get('token'))) {
+        if ($this->isCsrfTokenValid('delete'.$book->getId(), $request->query->get('token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($book);
             $entityManager->flush();
