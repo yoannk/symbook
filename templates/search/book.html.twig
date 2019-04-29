@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Résultats de la recherche</h1>
+
+    <div class="row">
+        {% for book in books %}
+            <div class="col-sm-3 mb-4">
+                <div class="card">
+                    <img src="{{ asset('uploads/' ~ book.image.name) }}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author.fullname }}</h6>
+                        <a href="{{ path('book_show', {'id': book.id}) }}" class="btn btn-primary">Voir le livre</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

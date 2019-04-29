@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     {% if book.image.name is defined %}
-                        <img width="50px" src="{{ asset('uploads/'~book.image.name) }}" alt="">
+                        <img width="50px" src="{{ asset('uploads/' ~ book.image.name) }}" alt="">
                     {% endif %}
                 </td>
                 <td>{{ book.id }}</td>
