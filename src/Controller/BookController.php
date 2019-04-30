@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class BookController extends AbstractController
     /**
      * @Route("/new", name="book_new", methods={"GET", "POST"})
      */
-    public function new(Request $request)
+    public function new(Request $request, FileUploader $fileUploader)
     {
         $book = new Book();
         $form = $this->createForm(BookType::class, $book);
@@ -34,17 +35,7 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $book->getImage()->getFile();
 
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-            // Move the file to the directory where brochures are stored
-            try {
-                $file->move(
-                    $this->getParameter('uploads_directory'),
-                    $fileName
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
+            $fileName = $fileUploader->upload($file);
 
             $book->getImage()->setName($fileName);
 
