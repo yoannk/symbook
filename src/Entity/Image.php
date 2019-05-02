@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,6 +35,8 @@ class Image
      */
     private $file;
 
+    private $path;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,5 +64,15 @@ class Image
         $this->file = $file;
 
         return $this;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function setPath($path): void
+    {
+        $this->path = $path;
     }
 }

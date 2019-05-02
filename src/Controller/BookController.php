@@ -26,18 +26,13 @@ class BookController extends AbstractController
     /**
      * @Route("/new", name="book_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, FileUploader $fileUploader)
+    public function new(Request $request)
     {
         $book = new Book();
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $book->getImage()->getFile();
-
-            $fileName = $fileUploader->upload($file);
-
-            $book->getImage()->setName($fileName);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
