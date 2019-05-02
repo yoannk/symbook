@@ -1,14 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des livres{% endblock %}
+{% block title %}Editer un livre{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un livre</h1>
+    <h1>Editer {{ book.title }}</h1>
 
     {{ form_start(form) }}
 
     {{ form_row(form.title) }}
     {{ form_row(form.description) }}
+    {% if book.image.id is defined %}
+        <img class="js-edit-image" width="50px" src="{{ asset('uploads/' ~ book.image.name) }}" alt="">
+    {% endif %}
     {{ form_row(form.image) }}
 
     <div class="row">

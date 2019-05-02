@@ -26,7 +26,7 @@ class ImageUploader
         $this->upload($args);
     }
 
-    private function upload(LifecycleEventArgs $args)
+    public function upload(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
 

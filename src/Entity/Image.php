@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Image
 {
@@ -74,5 +75,27 @@ class Image
     public function setPath($path): void
     {
         $this->path = $path;
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function upload()
+    {
+        if ($this->file === null) {
+            return;
+        }
+        if ($this->id && file_exists($this->path . '/' . $this->name)) {
+            unlink($this->path . '/' . $this->name);
+        }
+
+        $fileName = md5(uniqid()) . '.' . $this->file->guessExtension();
+        $this->setName($fileName);
+
+        try {
+            $this->file->move($this->path, $fileName);
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
     }
 }

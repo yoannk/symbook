@@ -34,6 +34,8 @@ class BookController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $book->getImage()->setPath($this->getParameter('uploads_directory'));
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
             $em->flush();
@@ -61,8 +63,26 @@ class BookController extends AbstractController
     /**
      * @Route("/{id}/edit", name="book_edit", methods={"GET", "POST"})
      */
-    public function edit(Book $book)
+    public function edit(Book $book, Request $request)
     {
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $book->getImage()->setPath($this->getParameter('uploads_directory'));
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Le livre a bien été édité');
+
+            return $this->redirectToRoute('book_index');
+        }
+
+        return $this->render('book/edit.html.twig', [
+            'book' => $book,
+            'form' => $form->createView()
+        ]);
     }
 
     /**
