@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         {% for book in books %}
-            <tr>
+            <tr id="book-{{ book.id }}">
                 <td>
                     {% if book.image.name is defined %}
                         <img width="50px" src="{{ asset('uploads/' ~ book.image.name) }}" alt="">
@@ -32,8 +32,9 @@
                         <a class="btn btn-primary btn-sm" href="{{ path('book_edit', {'id': book.id}) }}">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="btn btn-danger btn-sm"
-                           href="{{ path('book_delete', {'id': book.id, 'token': csrf_token('delete'~book.id)}) }}">
+                        <a class="js-delete-book btn btn-danger btn-sm" href="#"
+                           data-book-id="{{ book.id }}"
+                           data-path="{{ path('book_delete', {'id': book.id, 'token': csrf_token('delete'~book.id)}) }}">
                             <i class="fas fa-times"></i>
                         </a>
                     </div>

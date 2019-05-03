@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
-use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BookController extends AbstractController
@@ -33,7 +33,6 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $book->getImage()->setPath($this->getParameter('uploads_directory'));
 
             $em = $this->getDoctrine()->getManager();
@@ -69,7 +68,6 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $book->getImage()->setPath($this->getParameter('uploads_directory'));
 
             $this->getDoctrine()->getManager()->flush();
@@ -81,12 +79,12 @@ class BookController extends AbstractController
 
         return $this->render('book/edit.html.twig', [
             'book' => $book,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/delete", name="book_delete", methods={"GET"})
+     * @Route("/{id}", name="book_delete", methods={"DELETE"})
      */
     public function delete(Book $book, Request $request)
     {
@@ -95,9 +93,9 @@ class BookController extends AbstractController
             $entityManager->remove($book);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le livre a bien été supprimé');
+            return new JsonResponse();
         }
 
-        return $this->redirectToRoute('book_index');
+        return new JsonResponse(null, Response::HTTP_FORBIDDEN);
     }
 }

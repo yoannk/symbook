@@ -18,4 +18,6 @@ require('popper.js')
 require('bootstrap')
 require('holderjs')
 
+require('./delete-book.js')
+
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js')

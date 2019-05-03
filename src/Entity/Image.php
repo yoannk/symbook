@@ -82,14 +82,14 @@ class Image
      */
     public function upload()
     {
-        if ($this->file === null) {
+        if (null === $this->file) {
             return;
         }
-        if ($this->id && file_exists($this->path . '/' . $this->name)) {
-            unlink($this->path . '/' . $this->name);
+        if ($this->id && file_exists($this->path.'/'.$this->name)) {
+            unlink($this->path.'/'.$this->name);
         }
 
-        $fileName = md5(uniqid()) . '.' . $this->file->guessExtension();
+        $fileName = md5(uniqid()).'.'.$this->file->guessExtension();
         $this->setName($fileName);
 
         try {

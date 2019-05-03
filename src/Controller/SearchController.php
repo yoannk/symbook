@@ -23,7 +23,7 @@ class SearchController extends AbstractController
         $books = $bookRepository->search($search);
 
         return $this->render('search/book.html.twig', [
-            'books' => $books
+            'books' => $books,
         ]);
     }
 }

@@ -20,7 +20,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if ($this->maintenanceMode && $event->getRequest()->attributes->get('_route') === 'book_index') {
+        if ($this->maintenanceMode && 'book_index' === $event->getRequest()->attributes->get('_route')) {
             $content = $this->twig->render('maintenance/maintenance.html.twig');
             $response = new Response($content);
 
