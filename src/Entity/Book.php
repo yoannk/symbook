@@ -40,7 +40,7 @@ class Book
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Author", inversedBy="books", cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="books", cascade={"persist"}, fetch="EAGER")
      */
     private $author;
 
@@ -85,12 +85,12 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?Author
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(Author $author): void
+    public function setAuthor(User $author): void
     {
         $this->author = $author;
     }
