@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +27,7 @@ class BookController extends AbstractController
 
     /**
      * @Route("/new", name="book_new", methods={"GET", "POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function new(Request $request)
     {
@@ -34,6 +37,7 @@ class BookController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $book->getImage()->setPath($this->getParameter('uploads_directory'));
+            $book->setAuthor($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
@@ -64,6 +68,8 @@ class BookController extends AbstractController
      */
     public function edit(Book $book, Request $request)
     {
+        $this->denyAccessUnlessGranted('BOOK_EDIT', $book);
+
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 

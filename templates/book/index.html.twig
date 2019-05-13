@@ -12,7 +12,7 @@
             <th>Titre</th>
             <th>Auteur</th>
             <th>Description</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +28,7 @@
                 <td>{{ book.author.fullname }}</a></td>
                 <td>{{ book.description }}</a></td>
                 <td>
+                    {% if book.author == app.user %}
                     <div class="d-inline-flex">
                         <a class="btn btn-primary btn-sm" href="{{ path('book_edit', {'id': book.id}) }}">
                             <i class="fas fa-edit"></i>
@@ -38,6 +39,7 @@
                             <i class="fas fa-times"></i>
                         </a>
                     </div>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

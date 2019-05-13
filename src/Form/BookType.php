@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Book;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,7 +18,6 @@ class BookType extends AbstractType
             ->add('title', TextType::class)
             ->add('description', TextareaType::class)
             ->add('image', ImageType::class)
-            ->add('author', AuthorType::class, ['label' => false])
         ;
     }
 

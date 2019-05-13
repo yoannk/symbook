@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Image;
 use App\Entity\User;

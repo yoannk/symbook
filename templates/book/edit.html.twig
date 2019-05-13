@@ -14,15 +14,6 @@
     {% endif %}
     {{ form_row(form.image) }}
 
-    <div class="row">
-        <div class="col">
-            {{ form_row(form.author.firstname) }}
-        </div>
-        <div class="col">
-            {{ form_row(form.author.lastname) }}
-        </div>
-    </div>
-
     <button class="btn btn-primary" type="submit">Ajouter</button>
     {{ form_end(form) }}
 {% endblock %}
