@@ -99,7 +99,7 @@ class AppFixtures extends Fixture
 
     private function toEmail($firstname, $lastname, $domain) {
         $string = $firstname . '.' . $lastname;
-        $string = strtolower(trim(preg_replace('~[^0-9a-z]+~i', '.', html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|copy|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8')), ENT_QUOTES, 'UTF-8')), '.'));
+        $string = preg_replace('/\s+/', '-', mb_strtolower(trim(strip_tags($string)), 'UTF-8'));
         return $string . '@' . $domain;
     }
 }

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -29,6 +31,19 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('term', '%'.$term.'%')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findLatest(int $page = 1): Pagerfanta
+    {
+        $qd = $this->createQueryBuilder('b')
+            ->innerJoin('b.author', 'a')
+            ->orderBy('b.id', 'DESC');
+
+        $paginator = new Pagerfanta(new DoctrineORMAdapter($qd->getQuery()));
+        $paginator->setMaxPerPage(Book::NUM_ITEMS);
+        $paginator->setCurrentPage($page);
+
+        return $paginator;
     }
 
     // /**

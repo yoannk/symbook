@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Book
 {
+    const NUM_ITEMS = 10;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

@@ -6,7 +6,6 @@ use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +17,12 @@ class BookController extends AbstractController
     /**
      * @Route("/", name="book_index")
      */
-    public function index(BookRepository $bookRepository)
+    public function index(Request $request, BookRepository $bookRepository)
     {
+        $page = $request->query->get('page', 1);
+
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findBy([], ['id' => 'DESC']),
+            'books' => $bookRepository->findLatest($page)
         ]);
     }
 

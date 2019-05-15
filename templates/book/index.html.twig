@@ -45,7 +45,14 @@
         {% endfor %}
         </tbody>
     </table>
-    <ul>
 
-    </ul>
+    {% if books.haveToPaginate %}
+        <div class="navigation text-center">
+            {{ pagerfanta(books, 'twitter_bootstrap4_translated', {
+                routeName: 'book_index',
+                omitFirstPage: true
+            }) }}
+        </div>
+    {% endif %}
+
 {% endblock %}
