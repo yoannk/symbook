@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         {% for book in books %}
-            <tr id="book-{{ book.id }}">
+            <tr class="book" id="book-{{ book.id }}">
                 <td>
                     {% if book.image.name is defined %}
                         <img width="50px" src="{{ asset('uploads/' ~ book.image.name) }}" alt="">

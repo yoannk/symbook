@@ -81,25 +81,47 @@ class AppFixtures extends Fixture
     {
         $authors = [];
 
+        // User for functional tests
+        $authors[] = $this->createUser(
+            'Yoann',
+            'Kergall',
+            'gmail.com',
+            '1234',
+            'ROLE_USER'
+        );
+
+        // Random users
         for ($i = 0; $i < $amount; ++$i) {
-            $author = new User();
-            $firstname = $this->faker->firstName;
-            $lastname = $this->faker->lastName;
-            $author->setEmail($this->toEmail($firstname, $lastname, $this->faker->freeEmailDomain));
-            $author->setPassword($this->passwordEncoder->encodePassword($author, '1234'));
-            $author->setFirstname($firstname);
-            $author->setLastname($lastname);
-            $author->setRoles(['ROLE_USER']);
-            $author->setEnabled(true);
+            $author = $this->createUser(
+                $this->faker->firstName,
+                $this->faker->lastName,
+                $this->faker->freeEmailDomain,
+                '1234',
+                'ROLE_USER'
+            );
+
             $authors[] = $author;
         }
 
         return $authors;
     }
 
+    private function createUser($firstname, $lastname, $emailDomain, $password, $role): User
+    {
+        $user = new User();
+        $user->setEmail($this->toEmail($firstname, $lastname, $emailDomain));
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
+        $user->setRoles([$role]);
+        $user->setEnabled(true);
+
+        return $user;
+    }
+
     private function toEmail($firstname, $lastname, $domain) {
         $string = $firstname . '.' . $lastname;
-        $string = preg_replace('/\s+/', '-', mb_strtolower(trim(strip_tags($string)), 'UTF-8'));
+        $string = preg_replace('/\s+/', '.', mb_strtolower(trim(strip_tags($string)), 'UTF-8'));
         return $string . '@' . $domain;
     }
 }
