@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserCommand extends Command
@@ -32,14 +31,14 @@ class CreateUserCommand extends Command
     private $passwordEncoder;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
     private $manager;
 
     public function __construct(
         ValidatorInterface $validator,
         UserPasswordEncoderInterface $passwordEncoder,
-        ObjectManager $manager)
+        EntityManagerInterface $manager)
     {
         parent::__construct();
         $this->validator = $validator;
@@ -59,8 +58,8 @@ class CreateUserCommand extends Command
 
         $email = $io->ask('Email address: ', null, function ($value) {
             $violations = $this->validator->validate($value, [
-                New NotBlank(),
-                New Email()
+                new NotBlank(),
+                new Email()
             ]);
 
             if (count($violations) > 0) {
@@ -72,7 +71,7 @@ class CreateUserCommand extends Command
 
         $firstname = $io->ask('Firstname: ', null, function ($value) {
             $violations = $this->validator->validate($value, [
-                New NotBlank()
+                new NotBlank()
             ]);
 
             if (count($violations) > 0) {
@@ -84,7 +83,7 @@ class CreateUserCommand extends Command
 
         $lastname = $io->ask('Lastname: ', null, function ($value) {
             $violations = $this->validator->validate($value, [
-                New NotBlank()
+                new NotBlank()
             ]);
 
             if (count($violations) > 0) {
@@ -96,8 +95,8 @@ class CreateUserCommand extends Command
 
         $password = $io->askHidden('Password (length >= 4) : ', function ($value) {
             $violations = $this->validator->validate($value, [
-                New NotBlank(),
-                New Length(['min' => 4])
+                new NotBlank(),
+                new Length(['min' => 4])
             ]);
 
             if (count($violations) > 0) {
@@ -109,7 +108,7 @@ class CreateUserCommand extends Command
 
         $io->askHidden('Repeat password : ', function ($value) use ($password) {
             $violations = $this->validator->validate($value, [
-                New EqualTo($password)
+                new EqualTo($password)
             ]);
 
             if (count($violations) > 0) {

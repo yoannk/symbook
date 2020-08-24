@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BookRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
     }
@@ -28,7 +28,7 @@ class BookRepository extends ServiceEntityRepository
             ->where('b.title LIKE :term')
             ->orWhere('a.firstname LIKE :term')
             ->orWhere('a.lastname LIKE :term')
-            ->setParameter('term', '%'.$term.'%')
+            ->setParameter('term', '%' . $term . '%')
             ->getQuery()
             ->getResult();
     }
@@ -39,7 +39,7 @@ class BookRepository extends ServiceEntityRepository
             ->innerJoin('b.author', 'a')
             ->orderBy('b.id', 'DESC');
 
-        $paginator = new Pagerfanta(new DoctrineORMAdapter($qd->getQuery()));
+        $paginator = new Pagerfanta(new QueryAdapter($qd->getQuery()));
         $paginator->setMaxPerPage(Book::NUM_ITEMS);
         $paginator->setCurrentPage($page);
 
